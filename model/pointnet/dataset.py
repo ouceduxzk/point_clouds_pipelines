@@ -45,4 +45,4 @@ class ModelNetDataset(data.Dataset):
     return point_samples, point_cls
 
   def __len__(self):
-    return len(self.fns)
+    return len(self.fns[:-3])

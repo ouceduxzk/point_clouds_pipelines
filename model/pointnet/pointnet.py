@@ -65,7 +65,7 @@ class PointNetFeature(nn.Module):
     # n x 3 with 3 x 3
     x = torch.bmm(x, trans)
     x = x.transpose(2, 1)
-    x = F.relu(self.bn1(self.conv1(trans)))
+    x = F.relu(self.bn1(self.conv1(x)))
     #skip feature transform for now
 
     local_feat = x

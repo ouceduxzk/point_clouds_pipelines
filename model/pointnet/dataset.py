@@ -25,7 +25,7 @@ class ModelNetDataset(data.Dataset):
         self.fns.append(line.strip())
 
 
-  def __get_item__(self, index):
+  def __getitem__(self, index):
     fn = self.fns[index]
     category = fn.split("_")[0]
     cls_name = self.categry[category]

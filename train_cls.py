@@ -45,7 +45,7 @@ def main(argv):
       points, labels = data
       labels = labels[:, 0]
       points = points.transpose(2, 1) # bxnx3 -> bx3xn
-      points, labels = point.cuda(), labels.cuda()
+      points, labels = points.cuda(), labels.cuda()
       optimizer.zero_grad()
       classifier = classifier.train()
       pred = classifier(points)

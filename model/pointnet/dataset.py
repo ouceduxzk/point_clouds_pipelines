@@ -17,6 +17,7 @@ class ModelNetDataset(data.Dataset):
       for i, line in enumerate(fp):
         obj = line.strip()
         self.category[obj] = i
+
     self.classes = list(self.category.keys())
     with open(self.input_file, "r") as fp :
       for line in fp:
@@ -34,7 +35,7 @@ class ModelNetDataset(data.Dataset):
     print(file_path)
     data = np.load(file_path)
     sample_idx = np.random.choice(data.shape[0], self.num_points, replace=False)
-    samples = data[smaple_idx, :]
+    samples = data[smaple_idx, :3] #xyz only
 
     # the data is already normalized , no need to do that for now
 
@@ -44,3 +45,6 @@ class ModelNetDataset(data.Dataset):
     point_samples = torch.from_numpy(samples.astype(np.float32))
     point_cls = torch.from_numpy(np.array([cls_name]).astype(np.int64))
     return point_samples, point_cls
+
+  def __len__(self):
+    return len(self.fns)

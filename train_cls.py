@@ -48,7 +48,7 @@ def main(argv):
       points, labels = points.cuda(), labels.cuda()
       optimizer.zero_grad()
       classifier = classifier.train()
-      pred = classifier(points)
+      pred, trans = classifier(points)
 
 
 

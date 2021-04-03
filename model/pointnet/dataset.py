@@ -29,10 +29,8 @@ class ModelNetDataset(data.Dataset):
     fn = self.fns[index]
     category = fn.split("_")[0]
     cls_name = self.category[category]
-    print(cls_name)
 
     file_path = os.path.join(self.root, category , fn + ".npy")
-    print(file_path)
     data = np.load(file_path)
     sample_idx = np.random.choice(data.shape[0], self.num_points, replace=False)
     samples = data[sample_idx, :3] #xyz only

@@ -85,7 +85,7 @@ class PointNetCls(nn.Module):
   def __init__(self, feature_transform, num_classes):
     super(PointNetCls, self).__init__()
     self.num_classes = num_classes
-    self.feat = PointNetFeature()
+    self.feat, trans = PointNetFeature()
     self.fc1 = nn.Linear(1024, 512)
     self.fc2 = nn.Linear(512, 256)
     self.fc3 = nn.Linear(256, self.num_classes)
@@ -100,7 +100,7 @@ class PointNetCls(nn.Module):
     x = self.dropout(self.fc2(x))
     x = F.relu(self.bn2(x)())
     x = self.fc3(x)
-    return F.log_softmax(x, dim=1)
+    return F.log_softmax(x, dim=1), trans
 
 
 

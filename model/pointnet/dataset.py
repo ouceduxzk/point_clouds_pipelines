@@ -28,7 +28,7 @@ class ModelNetDataset(data.Dataset):
   def __getitem__(self, index):
     fn = self.fns[index]
     category = fn.split("_")[0]
-    cls_name = self.categry[category]
+    cls_name = self.category[category]
     print(cls_name)
 
     file_path = os.path.join(self.root, category , fn + ".npy")

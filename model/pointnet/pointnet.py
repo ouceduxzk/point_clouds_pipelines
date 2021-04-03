@@ -82,7 +82,7 @@ class PointNetFeature(nn.Module):
 
 
 class PointNetCls(nn.Module):
-  def __init__(self, feature_transform, num_classes):
+  def __init__(self, num_classes):
     super(PointNetCls, self).__init__()
     self.num_classes = num_classes
     self.feat = PointNetFeature()
@@ -105,3 +105,20 @@ class PointNetCls(nn.Module):
 
 
 
+if __name__ == '__main__':
+    sim_data = Variable(torch.rand(32,3,2500))
+    trans = TNet()
+    out = trans(sim_data)
+    print('stn', out.size())
+
+    pointfeat = PointNetFeature(global_features=True)
+    out, _= pointfeat(sim_data)
+    print('global feat', out.size())
+
+    pointfeat = PointNetFeature(global_features=False)
+    out, _= pointfeat(sim_data)
+    print('point feat', out.size())
+
+    cls = PointNetCls(num_classes = 5)
+    out, _ = cls(sim_data)
+    print('class', out.size())

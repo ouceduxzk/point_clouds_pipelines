@@ -35,7 +35,7 @@ class ModelNetDataset(data.Dataset):
     print(file_path)
     data = np.load(file_path)
     sample_idx = np.random.choice(data.shape[0], self.num_points, replace=False)
-    samples = data[smaple_idx, :3] #xyz only
+    samples = data[sample_idx, :3] #xyz only
 
     # the data is already normalized , no need to do that for now
 

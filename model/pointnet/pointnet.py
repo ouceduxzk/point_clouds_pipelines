@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
+from torch.autograd import Variable
 import numpy as np
 
 class TNet(nn.Module):

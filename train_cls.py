@@ -31,7 +31,7 @@ def main(argv):
   )
 
   # setup classifier
-  classifier  = pointnet.PointNetCls(True, 40)
+  classifier  = pointnet.PointNetCls(40)
   if FLAGS.model != "":
     classifier.load_state_dict(torch.load(FLAGS.model))
   optimizer = torch.optim.Adam(classifier.parameters(), lr=0.001, betas=(0.9, 0.999))

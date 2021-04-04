@@ -1,7 +1,7 @@
 from model.pointnet import dataset
 from model.pointnet import pointnet
 import torch
-
+import torch.nn.functional as F
 from absl import app
 from absl import flags
 

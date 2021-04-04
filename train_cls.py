@@ -11,7 +11,7 @@ flags.DEFINE_string("input", "", "folder for input")
 flags.DEFINE_integer("workers", 4 ,"# of workers")
 flags.DEFINE_integer("num_points", 2500, "# of points")
 flags.DEFINE_integer("batch_size", 8, "batch size")
-flags.DEFINE_integer("epochs", 1, "# of epochs")
+flags.DEFINE_integer("epochs", 30, "# of epochs")
 flags.DEFINE_string("model", "", "load pretrained model")
 
 def main(argv):
@@ -73,7 +73,7 @@ def main(argv):
     total_correct += correct.item()
     total_testset += points.size()[0]
 
-  print("final accuracy {}".format(total_correct / float(total_testset)))
+  print("final test accuracy {}".format(total_correct / float(total_testset)))
 
 
 if __name__ == '__main__':

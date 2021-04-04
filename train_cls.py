@@ -49,6 +49,12 @@ def main(argv):
       optimizer.zero_grad()
       classifier = classifier.train()
       pred, trans = classifier(points)
+      loss = F.nll_loss(pred, labels)
+      loss.backward()
+      optimizer.step()
+      pred_label = pred.data.max(1)[1]
+      correct = pred_label.eq(labels.data).cpu().sum()
+      print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(FLAGS.batch_size)))
 
 
 

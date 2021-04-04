@@ -36,7 +36,7 @@ class TNet(nn.Module):
 
     #not sure why we need to add a identity matrix
     batch_size = x.size()[0]
-    iden = Variable(torch.from_numpy(np.array([1,0,0,0,1,0,0,0,1]).astype(np.float32))).view(1, self.k * self.k).repeat(batch_size,1)
+    iden = Variable(torch.from_numpy(np.eye(self.k).flatten().astype(np.float32))).view(1, self.k * self.k).repeat(batch_size,1)
     if x.is_cuda :
       iden = iden.cuda()
 

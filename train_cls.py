@@ -54,9 +54,26 @@ def main(argv):
       optimizer.step()
       pred_label = pred.data.max(1)[1]
       correct = pred_label.eq(labels.data).cpu().sum()
-      print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(FLAGS.batch_size)))
+      if i % 20 ==0 :
+        print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(FLAGS.batch_size)))
 
+  torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % ("model_saved", epoch))
 
+  total_correct = 0
+  total_testset = 0
+  for j, data in enumerate(test_dataloader, 0):
+    points, labels = data
+    labels = labels[:, 0]
+    points = points.transpose(2, 1)
+    points, labels = points.cuda(), labels.cuda()
+    classifier = classifier.eval()
+    pred, _ = classifier(points)
+    pred_label = pred.data.max(1)[1]
+    correct = pred_label.eq(labels.data).cpu().sum()
+    total_correct += correct.item()
+    total_testset += points.size()[0]
+
+  print("final accuracy {}".format(total_correct / float(total_testset)))
 
 
 if __name__ == '__main__':

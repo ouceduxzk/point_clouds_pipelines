@@ -38,7 +38,17 @@ class ModelNetDataset(data.Dataset):
     # the data is already normalized , no need to do that for now
 
     # augmentaiton
-    #if self.aug:
+    if self.aug:
+      theta = np.random.uniform(0, np.pi * 2)
+      # random rotation with degree theta
+      random_matrix = np.array([
+        [np.cos(theta), - np.sin(theta)],
+        [np.sin(theta), np.cos(theta)]
+      ])
+
+      samples[:, [0, 2]] = samples[:, [0, 2]].dot(random_matrix)
+      #random jitter
+      samples += np.random.normal(0, 0.025, samples.shape)
 
     point_samples = torch.from_numpy(samples.astype(np.float32))
     point_cls = torch.from_numpy(np.array([cls_name]).astype(np.int64))

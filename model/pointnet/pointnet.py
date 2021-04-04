@@ -5,15 +5,16 @@ from torch.autograd import Variable
 import numpy as np
 
 class TNet(nn.Module):
-  def __init__(self):
+  def __init__(self, k = 3):
     super(TNet, self).__init__()
+    self.k = k
     self.conv1 = nn.Conv1d(3, 64, 1)
     self.conv2 = nn.Conv1d(64, 128, 1)
     self.conv3 = nn.Conv1d(128, 1024, 1)
 
     self.fc1 = nn.Linear(1024, 512)
     self.fc2 = nn.Linear(512, 256)
-    self.fc3 = nn.Linear(256, 9)
+    self.fc3 = nn.Linear(256, self.k * self.k)
 
     self.bn1 = nn.BatchNorm1d(64)
     self.bn2 = nn.BatchNorm1d(128)
@@ -35,12 +36,12 @@ class TNet(nn.Module):
 
     #not sure why we need to add a identity matrix
     batch_size = x.size()[0]
-    iden = Variable(torch.from_numpy(np.array([1,0,0,0,1,0,0,0,1]).astype(np.float32))).view(1, 9).repeat(batch_size,1)
+    iden = Variable(torch.from_numpy(np.array([1,0,0,0,1,0,0,0,1]).astype(np.float32))).view(1, self.k * self.k).repeat(batch_size,1)
     if x.is_cuda :
       iden = iden.cuda()
 
     x = x + iden
-    x = x.view(-1, 3, 3)
+    x = x.view(-1, self.k, self.k)
     return x
 
 class PointNetFeature(nn.Module):
@@ -48,9 +49,9 @@ class PointNetFeature(nn.Module):
     super(PointNetFeature, self).__init__()
     self.global_features = global_features
     self.input_transform = TNet()
-    self.feature_transform = TNet()
+    self.feature_transform = TNet(k=64)
 
-    self.conv1 = nn.Conv1d(3, 64, 1)
+    self.conv1 = nn.Conv1d(self.k, 64, 1)
     self.conv2 = nn.Conv1d(64, 128, 1)
     self.conv3 = nn.Conv1d(128, 1024, 1)
 
@@ -66,7 +67,12 @@ class PointNetFeature(nn.Module):
     x = torch.bmm(x, trans)
     x = x.transpose(2, 1)
     x = F.relu(self.bn1(self.conv1(x)))
-    #skip feature transform for now
+
+    # add feature transform
+    feature_trans = self.feature_transform(x)
+    x = x.transpose(2, 1)
+    x = torch.bmm(x, feature_trans)
+    x = x.transpose(2, 1)
 
     local_feat = x
     x = F.relu(self.bn2(self.conv2(x)))
